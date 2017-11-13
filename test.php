@@ -18,7 +18,7 @@
     <script type="text/javascript" src="/contents/javascript/jquery.min.js"></script>
     <script type="text/javascript" src="/contents/javascript/socket.io.js"></script>
     <script type="text/javascript" src="/contents/javascript/zingtouch-master/dist/zingtouch.js"></script>
-    <script type="text/javascript" src="/contents/javascript/player.js"></script>
+    <script type="text/javascript" src="/contents/javascript/player.min.js"></script>
     <script>
         var socket = io('http://<?php echo $host ?>:<?php echo $port ?>');
         var number = <?php echo $number ?>;

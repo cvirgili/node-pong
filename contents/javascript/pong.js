@@ -1,11 +1,17 @@
-// BABYLON.DebugLayer.InspectorURL = './contents/javascript/babylon.inspector.bundle.js';
+var BGaudio = new Audio('/contents/audio/Background.mp3');
+var ballaudio = new Audio('/contents/audio/Laser.mp3');
+var goalaudio = new Audio('/contents/audio/Goal.mp3');
+var applauseaudio = new Audio('/contents/audio/Applause.mp3');
 
 window.addEventListener('DOMContentLoaded', function() {
+
+    BGaudio.pause();
+    ballaudio.pause();
+    goalaudio.pause();
+    applauseaudio.pause();
+
     var canvas = document.getElementById('renderCanvas');
     var engine = new BABYLON.Engine(canvas, true);
-    var BGaudio = new Audio('/contents/audio/Background.mp3');
-    var ballaudio = new Audio('/contents/audio/Laser.mp3');
-    var goalaudio = new Audio('/contents/audio/Goal.mp3');
     var vel = 2;
 
     var createScene = function() {
@@ -24,12 +30,10 @@ window.addEventListener('DOMContentLoaded', function() {
         scene.enablePhysics(gravityVector, physicsPlugin);
         scene.ambientColor = new BABYLON.Color3(1, 1, 1);
 
-        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, -10), scene);
+        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, -12), scene);
         camera.setTarget(BABYLON.Vector3.Zero());
-        camera.ellipsoid = new BABYLON.Vector3(0.4, 2.8, 0.4);
 
         var light = new BABYLON.PointLight('light1', new BABYLON.Vector3(0, 0, -1000), scene);
-        light.specular = new BABYLON.Color3(0, 0, 1);
 
         var halfrow = BABYLON.Mesh.CreatePlane('middlerow', 0.1, scene);
         halfrow.scaling.y = 80;
@@ -42,21 +46,28 @@ window.addEventListener('DOMContentLoaded', function() {
         disc.material.specularColor = new BABYLON.Color3(1, 1, 0);
         disc.position.y = 0;
 
+        var floor = BABYLON.Mesh.CreateBox('floor', 200, scene);
+        floor.position.z = 0.5;
+        floor.scaling.z = 0.00001;
+        floor.material = new BABYLON.StandardMaterial('floor', scene);
+        floor.material.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+        floor.material.specularColor = new BABYLON.Color3(0, 0, 0);
+
         var box1 = BABYLON.Mesh.CreateBox('box1', 0.2, scene);
-        box1.scaling.y = 12.0;
-        box1.scaling.z = 2;
+        box1.scaling.y = 9.5;
+        box1.scaling.z = 4;
         box1.position.x = -6;
-        box1.position.z = -0.2;
+        box1.position.z = 0;
         box1.material = new BABYLON.StandardMaterial('box1mat', scene);
         box1.material.diffuseColor = new BABYLON.Color3(1.0, 0.766, 0.336);
         box1.material.emissiveColor = new BABYLON.Color3(1.0, 0.766, 0.336);
         box1.material.specularColor = new BABYLON.Color3(1.0, 0.766, 0.336);
 
         var box2 = BABYLON.Mesh.CreateBox('box2', 0.2, scene);
-        box2.scaling.y = 12.0;
-        box2.scaling.z = 2;
+        box2.scaling.y = 9.5;
+        box2.scaling.z = 4;
         box2.position.x = 6;
-        box2.position.z = -0.2;
+        box2.position.z = 0;
         box2.material = new BABYLON.StandardMaterial('box1mat', scene);
         box2.material.diffuseColor = new BABYLON.Color3(0.0, 0.766, 1.0);
         box2.material.emissiveColor = new BABYLON.Color3(0.0, 0.766, 1.0);
@@ -134,8 +145,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var updatePoints = function(n) {
             vel = 2;
-            if ((n == 1 && point1 > 0) || (n == 2 && point2 > 0))
+            if ((n == 1 && point1 > 0) || (n == 2 && point2 > 0)) {
+                playApplause();
                 playAudioGoal();
+            }
             textTitle.getContext().clearRect(0, 0, window.innerWidth, window.innerHeight);
             textTitle.drawText(format(point1) + " " + format(point2), null, null, "Bold 380px Consolas", "rgba(255,255,255,1.0)", "rgba(0,0,0,0)"); // "transparent"
             if (n == -1) return;
@@ -150,9 +163,19 @@ window.addEventListener('DOMContentLoaded', function() {
             imp1.setLinearVelocity(new BABYLON.Vector3(vx, vy, 0));
         };
 
-
-
         //////////////////////////////////////////////////////////////////////////////////////
+
+        var reset = function() {
+            disc.position.x = 0;
+            disc.position.y = 0;
+            box1.position.y = 0;
+            box2.position.y = 0;
+            point1 = 0;
+            point2 = 0;
+            disc.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
+            updatePoints(-1);
+            BGaudio.pause();
+        };
 
         socket.on('player', function(obj) {
             if (obj.n == 1)
@@ -167,26 +190,12 @@ window.addEventListener('DOMContentLoaded', function() {
             disc.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(n == 1 ? vel : -vel, 0, 0));
         });
 
-
-        var reset = function() {
-            disc.position.x = 0;
-            disc.position.y = 0;
-            box1.position.y = 0;
-            box2.position.y = 0;
-            point1 = 0;
-            point2 = 0;
-            disc.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
-            updatePoints(-1);
-            BGaudio.pause();
-        };
-
-        //socket.on('stop', function() { reset(); });
         socket.on('showqr', function(n) {
             $('#player' + n).show();
             $('#photo' + n).hide();
             reset();
         });
-
+        reset();
         return scene;
     };
 
@@ -200,8 +209,12 @@ window.addEventListener('DOMContentLoaded', function() {
         goalaudio.play();
     }
 
+    function playApplause() {
+        applauseaudio.currentTime = 0;
+        applauseaudio.play();
+    }
+
     var scene = createScene();
-    //scene.debugLayer.show({ popup: true });
     engine.runRenderLoop(function() {
         scene.render();
     });
@@ -241,6 +254,5 @@ window.addEventListener('DOMContentLoaded', function() {
         this.currentTime = 0;
         this.play();
     }, false);
-
 
 });

@@ -87,6 +87,6 @@ io.on('connect', function(socket) {
             io.sockets.emit('ready');
         }
 
-        console.log('clients: ' + clients.length);
+        // console.log('clients: ' + clients.length);
     });
 });
