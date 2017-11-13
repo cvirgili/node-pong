@@ -29,6 +29,9 @@
                   document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
                   socket.emit('user-photo', { n: number, url: res.data.url });
               });
+              //////////////////////////////////////////////////////////////////////////////////////////////////////
+              var p = new player(number, socket);
+              //////////////////////////////////////////////////////////////////////////////////////////////////////
           } else {
               document.getElementById('messages').innerText = 'User cancelled login or did not fully authorize.';
           }
@@ -41,5 +44,4 @@
       js.id = id;
       js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
-      var p = new player(number, socket);
   }(document, 'script', 'facebook-jssdk'));
