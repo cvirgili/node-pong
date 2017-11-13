@@ -8,11 +8,11 @@
       FB.AppEvents.logPageView();
       FB.login(function(response) {
           if (response.authResponse) {
-              FB.api('/me', { fields: 'name,email,picture.width(200).height(200)' }, function(response) {
-                  document.getElementById('name').innerText = response.name;
-                  console.log(JSON.stringify(response, null, 1));
-                  socket.emit('user-photo', { n: number, url: response.data.url });
-                  document.getElementById('profile-image').innerHTML = '<img src="' + response.data.url + '"/>';
+              FB.api('/me', { fields: 'name, email, picture.width(200).height(200)' }, function(res) {
+                  console.log(JSON.stringify(res, null, 1));
+                  document.getElementById('name').innerText = res.name;
+                  socket.emit('user-photo', { n: number, url: res.data.url });
+                  document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
               });
               //////////////////////////////////////////////////////////////////////////////////////////////////////
               //POST SU FB DOPO IL LOGIN
