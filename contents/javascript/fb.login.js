@@ -22,7 +22,6 @@
                       message: "Sto giocando a Pong! ;)",
                       name: 'NodeJS-Pong',
                       description: ''
-
                   },
                   function(resp) {
                       if (!resp || resp.error) {

@@ -33,7 +33,7 @@
         <div id="messages"></div>
         <div id="profile-image"></div>
     </div>
-    <script type="text/javascript" src="/contents/javascript/fb.login.js"></script>
+    <script type="text/javascript" src="/contents/javascript/fb.login.min.js"></script>
 </body>
 
 </html>
