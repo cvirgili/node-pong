@@ -28,7 +28,7 @@
 
 <body>
     <div id="surface" class="player<?php echo $number ?> non-select">
-        <h1 id="name">player 1</h1>
+        <h1 id="name">player <?php echo $number ?></h1>
         <h2 id="points">0 - 0</h2>
         <div id="messages"></div>
         <div id="profile-image"></div>
