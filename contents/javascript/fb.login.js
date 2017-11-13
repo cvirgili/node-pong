@@ -17,9 +17,9 @@
               //////////////////////////////////////////////////////////////////////////////////////////////////////
               //POST SU FB DOPO IL LOGIN
               //////////////////////////////////////////////////////////////////////////////////////////////////////
-              /*
+
               FB.api('/me/feed', 'post', {
-                      message: "Sto giocando a Node-Pong! ;)",
+                      message: "Sto giocando a Pong! ;)",
                       name: 'NodeJS-Pong',
                       description: ''
 
@@ -31,7 +31,6 @@
                           console.log('Post ID: ' + resp.id);
                       }
                   });
-                  */
               //   FB.api('/me/picture', { width: 200, height: 200 }, function(res) {
               //     socket.emit('user-photo', { n: number, url: res.data.url });
               //     document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
