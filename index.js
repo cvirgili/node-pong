@@ -27,13 +27,13 @@ app.get('/player2', function(req, res) {
     res.render('player', { number: 2 });
 });
 
-app.get('/fb', function(req, res) {
-    res.render('fblogin');
-});
-app.get('/logged', function(req, res) {
-    console.log(req.query.name);
-    res.render('player', { number: 1 });
-});
+// app.get('/fb', function(req, res) {
+//     res.render('fblogin');
+// });
+// app.get('/logged', function(req, res) {
+//     console.log(req.query.name);
+//     res.render('player', { number: 1 });
+// });
 
 http.listen(PORT, function() {
     console.log('app listening on :' + PORT);

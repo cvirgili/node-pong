@@ -37,6 +37,7 @@
     display: none;
     height: 10vh;
     width: 10vh;
+    padding: 0;
 }
 
 #player1,
