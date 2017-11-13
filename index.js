@@ -16,23 +16,15 @@ app.set('view engine', 'ejs');
 app.use(favicon(__dirname + '/favicon.ico'));
 
 app.get('/pong', function(req, res) {
-    res.render('pong', { ip: ip.address() + ':' + PORT });
+    res.render('pong', { ip: ip.address(), port: PORT });
 });
 
-app.get('/player1', function(req, res) {
-    res.render('player', { number: 1 });
-});
-
-app.get('/player2', function(req, res) {
-    res.render('player', { number: 2 });
-});
-
-// app.get('/fb', function(req, res) {
-//     res.render('fblogin');
-// });
-// app.get('/logged', function(req, res) {
-//     console.log(req.query.name);
+// app.get('/player1', function(req, res) {
 //     res.render('player', { number: 1 });
+// });
+
+// app.get('/player2', function(req, res) {
+//     res.render('player', { number: 2 });
 // });
 
 http.listen(PORT, function() {

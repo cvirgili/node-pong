@@ -39,12 +39,12 @@ window.addEventListener('DOMContentLoaded', function() {
         halfrow.scaling.y = 80;
         halfrow.material = wallmaterial;
 
-        var disc = BABYLON.Mesh.CreateSphere('sphere1', 8, 0.4, scene);
-        disc.material = new BABYLON.StandardMaterial('spherematerial', scene);
-        disc.material.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0);
-        disc.material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0);
-        disc.material.specularColor = new BABYLON.Color3(1, 1, 0);
-        disc.position.y = 0;
+        var ball = BABYLON.Mesh.CreateSphere('sphere1', 8, 0.4, scene);
+        ball.material = new BABYLON.StandardMaterial('spherematerial', scene);
+        ball.material.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0);
+        ball.material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0);
+        ball.material.specularColor = new BABYLON.Color3(1, 1, 0);
+        ball.position.y = 0;
 
         var floor = BABYLON.Mesh.CreateBox('floor', 200, scene);
         floor.position.z = 0.5;
@@ -113,14 +113,14 @@ window.addEventListener('DOMContentLoaded', function() {
         scene.collisionsEnabled = true;
         box1.checkCollisions = true;
         box2.checkCollisions = true;
-        disc.checkCollisions = true;
+        ball.checkCollisions = true;
         wall1.checkCollisions = true;
         wall2.checkCollisions = true;
         goal1.checkCollisions = true;
         goal2.checkCollisions = true;
         box1.physicsImpostor = new BABYLON.PhysicsImpostor(box1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1, move: false });
         box2.physicsImpostor = new BABYLON.PhysicsImpostor(box2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1, move: false });
-        disc.physicsImpostor = new BABYLON.PhysicsImpostor(disc, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 1 });
+        ball.physicsImpostor = new BABYLON.PhysicsImpostor(ball, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 1 });
         wall1.physicsImpostor = new BABYLON.PhysicsImpostor(wall1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1, move: false });
         wall2.physicsImpostor = new BABYLON.PhysicsImpostor(wall2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1, move: false });
         goal1.physicsImpostor = new BABYLON.PhysicsImpostor(goal1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0, move: false });
@@ -128,17 +128,17 @@ window.addEventListener('DOMContentLoaded', function() {
         goal1.physicsImpostor.physicsBody.collisionResponse = false;
         goal2.physicsImpostor.physicsBody.collisionResponse = false;
 
-        disc.physicsImpostor.registerOnPhysicsCollide(box1.physicsImpostor, function(coll, collagnst) {
-            setVelocity(disc, box1, coll, vel);
+        ball.physicsImpostor.registerOnPhysicsCollide(box1.physicsImpostor, function(coll, collagnst) {
+            setVelocity(ball, box1, coll, vel);
         });
-        disc.physicsImpostor.registerOnPhysicsCollide(box2.physicsImpostor, function(coll, collagnst) {
-            setVelocity(disc, box2, coll, -vel);
+        ball.physicsImpostor.registerOnPhysicsCollide(box2.physicsImpostor, function(coll, collagnst) {
+            setVelocity(ball, box2, coll, -vel);
         });
-        disc.physicsImpostor.registerOnPhysicsCollide(goal1.physicsImpostor, function(coll, collagnst) {
+        ball.physicsImpostor.registerOnPhysicsCollide(goal1.physicsImpostor, function(coll, collagnst) {
             point2++;
             updatePoints(2);
         });
-        disc.physicsImpostor.registerOnPhysicsCollide(goal2.physicsImpostor, function(coll, collagnst) {
+        ball.physicsImpostor.registerOnPhysicsCollide(goal2.physicsImpostor, function(coll, collagnst) {
             point1++;
             updatePoints(1);
         });
@@ -166,13 +166,13 @@ window.addEventListener('DOMContentLoaded', function() {
         //////////////////////////////////////////////////////////////////////////////////////
 
         var reset = function() {
-            disc.position.x = 0;
-            disc.position.y = 0;
+            ball.position.x = 0;
+            ball.position.y = 0;
             box1.position.y = 0;
             box2.position.y = 0;
             point1 = 0;
             point2 = 0;
-            disc.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
+            ball.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
             updatePoints(-1);
             BGaudio.pause();
         };
@@ -185,9 +185,9 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         socket.on('start', function(n) {
-            disc.position.x = n == 1 ? box1.position.x + 0.1 : box2.position.x - 0.1;
-            disc.position.y = n == 1 ? box1.position.y : box2.position.y;
-            disc.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(n == 1 ? vel : -vel, 0, 0));
+            ball.position.x = n == 1 ? box1.position.x + 0.1 : box2.position.x - 0.1;
+            ball.position.y = n == 1 ? box1.position.y : box2.position.y;
+            ball.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(n == 1 ? vel : -vel, 0, 0));
         });
 
         socket.on('showqr', function(n) {

@@ -10,7 +10,7 @@
     <script type="text/javascript" src="/contents/javascript/jquery-qrcode-master/src/jquery.qrcode.js"></script>
     <script type="text/javascript" src="/contents/javascript/jquery-qrcode-master/src/qrcode.js"></script>
     <script type="text/javascript" src="/contents/javascript/babylon.custom.js"></script>
-    <script src="/contents/javascript/babylon.inspector.bundle.js"></script>
+    <!--<script src="/contents/javascript/babylon.inspector.bundle.js"></script>-->
     <script type="text/javascript" src="/contents/javascript/socket.io.js"></script>
     <script>
         var socket = io();
@@ -28,10 +28,8 @@
     <script type="text/javascript" src="/contents/javascript/pong.js">
     </script>
     <script>
-    //http://www.virgili.netsons.org/test.php?number=1&host=<%=ip%>&port=3000
-    //http://www.virgili.netsons.org/test.php?number=2&host=<%=ip%>&port=3000
-    $('#player1').qrcode("http://www.virgili.netsons.org/test.php?number=1&host=<%=ip%>&port=3000");
-    $('#player2').qrcode("http://www.virgili.netsons.org/test.php?number=2&host=<%=ip%>&port=3000");
+    $('#player1').qrcode("http://www.virgili.netsons.org/player.php?number=1&host=<%=ip%>&port=<%=port%>");
+    $('#player2').qrcode("http://www.virgili.netsons.org/player.php?number=2&host=<%=ip%>&port=<%=port%>");
     </script>
 </body>
 
