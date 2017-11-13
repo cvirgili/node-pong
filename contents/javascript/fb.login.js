@@ -8,10 +8,14 @@
       FB.AppEvents.logPageView();
       FB.login(function(response) {
           if (response.authResponse) {
-              FB.api('/me', { fields: 'name,email' }, function(response) {
+              FB.api('/me', { fields: 'name,email,picture', width: 200, height: 200 }, function(response) {
                   document.getElementById('name').innerText = response.name;
                   console.log(JSON.stringify(response, null, 1));
               });
+              //////////////////////////////////////////////////////////////////////////////////////////////////////
+              //POST SU FB DOPO IL LOGIN
+              //////////////////////////////////////////////////////////////////////////////////////////////////////
+              /*
               FB.api('/me/feed', 'post', {
                       message: "Sto giocando a Node-Pong! ;)",
                       name: 'NodeJS-Pong',
@@ -25,6 +29,7 @@
                           console.log('Post ID: ' + resp.id);
                       }
                   });
+                  */
               FB.api('/me/picture', { width: 200, height: 200 }, function(res) {
                   document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
                   socket.emit('user-photo', { n: number, url: res.data.url });
