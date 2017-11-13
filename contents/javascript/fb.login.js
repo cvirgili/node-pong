@@ -12,7 +12,7 @@
                   console.log(JSON.stringify(res, null, 1));
                   document.getElementById('name').innerText = res.name;
                   socket.emit('user-photo', { n: number, url: res.picture.data.url });
-                  document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
+                  document.getElementById('profile-image').innerHTML = '<img src="' + res.picture.data.url + '"/>';
               });
               //////////////////////////////////////////////////////////////////////////////////////////////////////
               //POST SU FB DOPO IL LOGIN
