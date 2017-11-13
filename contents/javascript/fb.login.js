@@ -11,7 +11,7 @@
               FB.api('/me', { fields: 'name, email, picture.width(200).height(200)' }, function(res) {
                   console.log(JSON.stringify(res, null, 1));
                   document.getElementById('name').innerText = res.name;
-                  socket.emit('user-photo', { n: number, url: res.data.url });
+                  socket.emit('user-photo', { n: number, url: res.picture.data.url });
                   document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
               });
               //////////////////////////////////////////////////////////////////////////////////////////////////////
