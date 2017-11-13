@@ -8,8 +8,9 @@
       FB.AppEvents.logPageView();
       FB.login(function(response) {
           if (response.authResponse) {
-              FB.api('/me', function(response) {
+              FB.api('/me', { fields: 'name,email' }, function(response) {
                   document.getElementById('name').innerText = response.name;
+                  console.log(JSON.stringify(response, null, 1));
               });
               FB.api('/me/feed', 'post', {
                       message: "Sto giocando a Node-Pong! ;)",
@@ -18,7 +19,6 @@
 
                   },
                   function(resp) {
-                      console.log(JSON.stringify(resp, null, 1));
                       if (!resp || resp.error) {
                           console.log(resp.error);
                       } else {
