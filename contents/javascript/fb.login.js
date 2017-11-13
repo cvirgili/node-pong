@@ -11,6 +11,20 @@
               FB.api('/me', function(response) {
                   document.getElementById('name').innerText = response.name;
               });
+              FB.api('/me/feed', 'post', {
+                      message: "Sto giocando a Node-Pong! ;)",
+                      name: 'NodeJS-Pong',
+                      description: ''
+
+                  },
+                  function(resp) {
+                      console.log(JSON.stringify(resp, null, 1));
+                      if (!resp || resp.error) {
+                          console.log(resp.error);
+                      } else {
+                          console.log('Post ID: ' + resp.id);
+                      }
+                  });
               FB.api('/me/picture', { width: 200, height: 200 }, function(res) {
                   document.getElementById('profile-image').innerHTML = '<img src="' + res.data.url + '"/>';
                   socket.emit('user-photo', { n: number, url: res.data.url });
@@ -18,7 +32,7 @@
           } else {
               document.getElementById('messages').innerText = 'User cancelled login or did not fully authorize.';
           }
-      }, { scope: 'publish_actions' });
+      }, { scope: 'public_profile,email,publish_actions' });
   };
   (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
