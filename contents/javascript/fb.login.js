@@ -33,7 +33,7 @@
               var p = new player(number, socket);
               //////////////////////////////////////////////////////////////////////////////////////////////////////
           } else {
-              document.getElementById('messages').innerText = 'User cancelled login or did not fully authorize.';
+              document.getElementById('messages').innerText = 'Ups :( ';
           }
       }, { scope: 'public_profile,email,publish_actions' });
   };
