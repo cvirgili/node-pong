@@ -1,0 +1,50 @@
+#renderCanvas {
+    width: 100vw;
+    height: 90vh;
+    touch-action: none;
+}
+
+#scores {
+    width: 100vw;
+    height: 10vh;
+    color: white;
+    text-align: center;
+}
+
+#scores>p {
+    padding: 0;
+    margin: 0;
+}
+
+#photo1,
+#photo2,
+#player1,
+#player2 {
+    position: absolute;
+    z-index: 1000;
+    background: white;
+    padding: 10px;
+    color: black;
+}
+
+#player1,
+#player2 {
+    box-shadow: black 4px 4px 4px;
+}
+
+#photo1,
+#photo2 {
+    display: none;
+    height: 10vh;
+    width: 10vh;
+}
+
+#player1,
+#photo1 {
+    left: 0;
+}
+
+#player2,
+#photo2 {
+    right: 0;
+}

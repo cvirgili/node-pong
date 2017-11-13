@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="/contents/styles/style.css" />
+    <link rel="stylesheet" href="/contents/styles/player.css" />
+    <script type="text/javascript" src="/contents/javascript/jquery.min.js"></script>
+</head>
+
+<body>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '1595259017177350',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v2.11'
+    });
+    FB.AppEvents.logPageView();
+    FB.login(function(response) {
+        if (response.authResponse) {
+          console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+          console.log('Good to see you, ' + JSON.stringify(response,null,1) + '.');
+          location.href='/logged?name='+response.name;
+          //$.get('/logged',{name:response.name});
+        });
+        } else {
+          console.log('User cancelled login or did not fully authorize.');
+        }
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<h1>FB Login</h1>
+
+<script>
+</script>
+
+</body>
+</html>

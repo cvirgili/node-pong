@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <title>Babylon - Getting Started</title>
+    <link rel="stylesheet" href="/contents/styles/style.css" />
+    <link rel="stylesheet" href="/contents/styles/pong.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/contents/javascript/jquery-qrcode-master/src/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="/contents/javascript/jquery-qrcode-master/src/qrcode.js"></script>
+    <script type="text/javascript" src="/contents/javascript/babylon.custom.js"></script>
+    <script src="/contents/javascript/babylon.inspector.bundle.js"></script>
+    <script type="text/javascript" src="/contents/javascript/socket.io.js"></script>
+    <script>
+        var socket = io();
+    </script>
+</head>
+
+<body>
+    <div id="scores">
+    <div id="player1"><h2>PLAYER 1</h2></div>
+    <div id="player2"><h2>PLAYER 2</h2></div>
+    <div id="photo1"></div>
+    <div id="photo2"></div>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+    <script type="text/javascript" src="/contents/javascript/pong.js">
+    </script>
+    <script>
+    $('#player1').qrcode("http://<%=ip%>/player1");
+    $('#player2').qrcode("http://<%=ip%>/player2");
+    </script>
+</body>
+
+</html>

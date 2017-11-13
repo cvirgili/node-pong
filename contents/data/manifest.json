@@ -1,0 +1,7 @@
+{
+    "short_name": "Test HTML5 Game",
+    "name": "Pong HTML5 version",
+    "start_url": "/index.html",
+    "display": "fullscreen",
+    "orientation": "landscape"
+  }
