@@ -177,7 +177,7 @@ window.addEventListener('DOMContentLoaded', function() {
             BGaudio.pause();
         };
 
-        socket.on('player', function(obj) {
+        socket.on('playery', function(obj) {
             if (obj.n == 1)
                 box1.position.y = obj.y;
             if (obj.n == 2)

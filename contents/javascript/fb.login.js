@@ -18,26 +18,26 @@
               //POST SU FB DOPO IL LOGIN
               //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            //   FB.api('/me/feed', 'post', {
-            //           message: "Sto giocando a Pong! ;)",
-            //           name: 'NodeJS-Pong',
-            //           description: ''
-            //       },
-            //       function(resp) {
-            //           if (!resp || resp.error) {
-            //               console.log(resp.error);
-            //           } else {
-            //               console.log('Post ID: ' + resp.id);
-            //           }
-            //       });
+              //   FB.api('/me/feed', 'post', {
+              //           message: "Sto giocando a Pong! ;)",
+              //           name: 'NodeJS-Pong',
+              //           description: ''
+              //       },
+              //       function(resp) {
+              //           if (!resp || resp.error) {
+              //               console.log(resp.error);
+              //           } else {
+              //               console.log('Post ID: ' + resp.id);
+              //           }
+              //       });
 
 
-              //////////////////////////////////////////////////////////////////////////////////////////////////////
-              var p = new player(number, socket);
-              //////////////////////////////////////////////////////////////////////////////////////////////////////
           } else {
               document.getElementById('messages').innerText = 'Ups :( ';
           }
+          //////////////////////////////////////////////////////////////////////////////////////////////////////
+          var p = new player(number, socket);
+          //////////////////////////////////////////////////////////////////////////////////////////////////////
       }, { scope: 'public_profile,email,publish_actions' });
   };
   (function(d, s, id) {
