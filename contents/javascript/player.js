@@ -10,7 +10,7 @@ class player {
         this.zt = new ZingTouch.Region(document.body);
         this.initSocket();
         this.getTouchPosition();
-        
+
         //this.getAccelerometer();
     }
 
@@ -18,17 +18,25 @@ class player {
         var sk = this.socket;
         var n = this.number;
         var zt = this.zt;
-        var start = function() {
-            sk.emit('start', n);
+        var isStart = false;
+        var start = function(ev) {
+            sk.emit('player', {
+                n: n,
+                y: getYPosition(ev)
+            });
+
+            if (isStart) {
+                sk.emit('start', n);
+                isStart = false;
+            }
             document.getElementById('messages').innerText = "";
-            zt.unbind(surface, 'tap', start);
+            // zt.unbind(surface, 'tap', start);
         };
         //console.log('connected: ' + n);
         document.getElementById('surface').style.opacity = 1;
         sk.emit('playerconnected', n);
         document.getElementById('messages').innerText = "connected";
-        this.socket.on('connect', function() {
-        });
+        this.socket.on('connect', function() {});
         this.socket.on('error', function() {
             document.getElementById('messages').innerText = "error";
             sk.close();
@@ -52,7 +60,8 @@ class player {
             document.getElementById('points').innerText = p.point1 + " : " + p.point2;
             if (n == p.n) {
                 document.getElementById('messages').innerText = "TAP TO START";
-                zt.bind(surface, 'tap', start);
+                isStart = true;
+                //zt.bind(surface, 'tap', start);
             } else {
                 document.getElementById('messages').innerText = "";
             }
@@ -63,16 +72,24 @@ class player {
         var sk = this.socket;
         var n = this.number;
         var surface = document.getElementById('surface');
+        zt.bind(surface, 'tap', start);
         this.zt.bind(surface, 'pan', function(ev) {
             //console.log('pan: ' + ev.detail.events[0].clientY);
-            var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
-            if (vy < -3) vy = -3;
-            if (vy > 3) vy = 3;
+            // var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
+            // if (vy < -3) vy = -3;
+            // if (vy > 3) vy = 3;
             sk.emit('player', {
                 n: n,
-                y: -vy
+                y: getYPosition(ev)
             });
         });
+    }
+
+    getYPosition(ev) {
+        var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
+        if (vy < -3) vy = -3;
+        if (vy > 3) vy = 3;
+        return -vy;
     }
 
 

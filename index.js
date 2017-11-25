@@ -47,7 +47,11 @@ io.on('connect', function(socket) {
     socket.on('close', function(data) {});
     socket.on('end', function(data) {});
     socket.on('player', function(obj) {
-        socket.broadcast.emit('playery', obj);
+        if (obj.n == 1)
+            io.emit('player1', obj.y);
+        if (obj.n == 2)
+            io.emit('player2', obj.y);
+
     });
 
     socket.on('resetclients', function() {

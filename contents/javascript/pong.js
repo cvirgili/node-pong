@@ -177,12 +177,19 @@ window.addEventListener('DOMContentLoaded', function() {
             BGaudio.pause();
         };
 
-        socket.on('playery', function(obj) {
-            if (obj.n == 1)
-                box1.position.y = obj.y;
-            if (obj.n == 2)
-                box2.position.y = obj.y;
+        socket.on('player1', function(y) {
+            setBoxVelocity(box1, y);
         });
+        socket.on('player2', function(y) {
+            setBoxVelocity(box2, y);
+        });
+
+        function setBoxVelocity(box, y) {
+            box.position.y = y;
+            // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0, y, 0));
+            // if (box.position.y > 3) box.position.y = 3;
+            // if (box.position.y < -3) box.position.y = -3;
+        }
 
         socket.on('start', function(n) {
             ball.position.x = n == 1 ? box1.position.x + 0.1 : box2.position.x - 0.1;
