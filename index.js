@@ -27,10 +27,6 @@ app.get('/pong', function(req, res) {
 //     res.render('player', { number: 2 });
 // });
 
-http.listen(PORT, function() {
-    console.log('app listening on :' + PORT);
-});
-
 io.on('connect', function(socket) {
     socket.on('error', function() {});
     socket.on('disconnect', function(data) {
@@ -85,4 +81,8 @@ io.on('connect', function(socket) {
 
         // console.log('clients: ' + clients.length);
     });
+});
+
+http.listen(PORT, function() {
+    console.log('app listening on :' + PORT);
 });
