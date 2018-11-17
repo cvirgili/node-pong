@@ -19,13 +19,13 @@ app.get('/pong', function(req, res) {
     res.render('pong', { ip: ip.address(), port: PORT });
 });
 
-// app.get('/player1', function(req, res) {
-//     res.render('player', { number: 1 });
-// });
+app.get('/player1', function(req, res) {
+    res.render('player', { ip: ip.address(), number: 1 });
+});
 
-// app.get('/player2', function(req, res) {
-//     res.render('player', { number: 2 });
-// });
+app.get('/player2', function(req, res) {
+    res.render('player', { ip: ip.address(), number: 2 });
+});
 
 io.on('connect', function(socket) {
     socket.on('error', function() {});

@@ -1,4 +1,5 @@
 /*jshint esversion: 6*/
+var getYPosition;
 class player {
     constructor(number, socket) {
         //$('#messages').text("PLAYER CREATED");
@@ -10,8 +11,14 @@ class player {
         this.zt = new ZingTouch.Region(document.body);
         this.initSocket();
         this.getTouchPosition();
-
+        this.start;
         //this.getAccelerometer();
+        getYPosition = function(ev) {
+            var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
+            if (vy < -3) vy = -3;
+            if (vy > 3) vy = 3;
+            return -vy;
+        };
     }
 
     initSocket() {
@@ -19,7 +26,7 @@ class player {
         var n = this.number;
         var zt = this.zt;
         var isStart = false;
-        var start = function(ev) {
+        this.start = function(ev) {
             sk.emit('player', {
                 n: n,
                 y: getYPosition(ev)
@@ -72,7 +79,7 @@ class player {
         var sk = this.socket;
         var n = this.number;
         var surface = document.getElementById('surface');
-        zt.bind(surface, 'tap', start);
+        this.zt.bind(surface, 'tap', this.start);
         this.zt.bind(surface, 'pan', function(ev) {
             //console.log('pan: ' + ev.detail.events[0].clientY);
             // var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
@@ -85,12 +92,6 @@ class player {
         });
     }
 
-    getYPosition(ev) {
-        var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
-        if (vy < -3) vy = -3;
-        if (vy > 3) vy = 3;
-        return -vy;
-    }
 
 
     getAccelerometer() {

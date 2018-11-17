@@ -28,8 +28,10 @@
     <script type="text/javascript" src="/contents/javascript/pong.js">
     </script>
     <script>
-    $('#player1').qrcode("http://www.virgili.netsons.org/player.php?number=1&host=<%=ip%>&port=<%=port%>");
-    $('#player2').qrcode("http://www.virgili.netsons.org/player.php?number=2&host=<%=ip%>&port=<%=port%>");
+//    $('#player1').qrcode("http://www.virgili.netsons.org/player.php?number=1&host=<%=ip%>&port=<%=port%>");
+//    $('#player2').qrcode("http://www.virgili.netsons.org/player.php?number=2&host=<%=ip%>&port=<%=port%>");
+    $('#player1').qrcode("http://<%=ip%>:3000/player1");
+    $('#player2').qrcode("http://<%=ip%>:3000/player2");
     </script>
 </body>
 
