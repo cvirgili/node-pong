@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <title>PONG - Player<%=number%></title>
-    <link rel="manifest" href="/contents/data/manifest.json">
+    <link rel="manifest" href="/contents/data/manifest<%=number%>.json">
     <link rel="stylesheet" href="/contents/styles/style.css" />
     <link rel="stylesheet" href="/contents/styles/player.css" />
     <script type="text/javascript" src="/contents/javascript/jquery.min.js"></script>
@@ -26,13 +26,14 @@
         <div id="messages"></div>
         <div id="profile-image"></div>
     </div>
+    <script type="text/javascript" src="/contents/javascript/fb.login.js"></script>
+    <script type="text/javascript" src="/contents/javascript/player.js"></script>
     <script>
     $(function(){
         var p = new player(number,socket);
+        p.startSendY();
     });
     </script>
-    <script type="text/javascript" src="/contents/javascript/fb.login.js"></script>
-    <script type="text/javascript" src="/contents/javascript/player.js"></script>
 </body>
 
 </html>

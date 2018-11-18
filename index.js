@@ -50,6 +50,14 @@ io.on('connect', function(socket) {
 
     });
 
+
+    socket.on('player1', (y) => {
+        io.emit('player1', y);
+    });
+    socket.on('player2', (y) => {
+        io.emit('player2', y);
+    });
+
     socket.on('resetclients', function() {
         io.sockets.emit('resetclients');
 

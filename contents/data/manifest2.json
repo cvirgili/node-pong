@@ -1,0 +1,10 @@
+{
+    "short_name": "Pong",
+    "name": "Pong remore mobile",
+    "icons": [],
+    "start_url": "/player2",
+    "background_color": "#3367D6",
+    "display": "fullscreen",
+    "scope": "/",
+    "theme_color": "#3367D6"
+}

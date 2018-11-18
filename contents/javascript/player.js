@@ -1,5 +1,5 @@
 /*jshint esversion: 6*/
-var getYPosition;
+var interval, ypos = 0.0;
 class player {
     constructor(number, socket) {
         //$('#messages').text("PLAYER CREATED");
@@ -9,16 +9,34 @@ class player {
         this.socket = socket;
         this.socket.forceNew = true;
         this.zt = new ZingTouch.Region(document.body);
+        this.getYPosition = function(ev) {
+            //ypos += 3 * (ev.detail.data[0].distanceFromOrigin / window.innerHeight) * ((ev.detail.data[0].directionFromOrigin >= 0 && ev.detail.data[0].directionFromOrigin <= 180) ? 1 : -1);
+            //ypos += 0.1 * ((ev.detail.data[0].directionFromOrigin >= 0 && ev.detail.data[0].directionFromOrigin <= 180) ? 1 : -1);
+            // ypos = ev.detail.events[0].clientY / window.innerHeight * 1.5 * -6 + 3;
+            ypos = ev.detail.events[0].pageY / document.getElementById('surface').clientHeight * -10 + 5;
+            //var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
+            // if (vy < -3) vy = -3;
+            // if (vy > 3) vy = 3;
+            if (ypos < -3) ypos = -3;
+            if (ypos > 3) ypos = 3;
+            console.log("event", ev);
+            //document.getElementById('messages').innerText = ypos;
+
+            return ypos;
+        };
         this.initSocket();
         this.getTouchPosition();
         this.start;
         //this.getAccelerometer();
-        getYPosition = function(ev) {
-            var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
-            if (vy < -3) vy = -3;
-            if (vy > 3) vy = 3;
-            return -vy;
-        };
+
+        this.startSendY = function() {
+            interval = setInterval(function() {
+                socket.emit('player' + number, ypos);
+            }, 50);
+        }
+        this.stopSendY = function() {
+            clearInterval(interval);
+        }
     }
 
     initSocket() {
@@ -27,19 +45,12 @@ class player {
         var zt = this.zt;
         var isStart = false;
         this.start = function(ev) {
-            sk.emit('player', {
-                n: n,
-                y: getYPosition(ev)
-            });
-
             if (isStart) {
                 sk.emit('start', n);
                 isStart = false;
             }
             document.getElementById('messages').innerText = "";
-            // zt.unbind(surface, 'tap', start);
         };
-        //console.log('connected: ' + n);
         document.getElementById('surface').style.opacity = 1;
         sk.emit('playerconnected', n);
         document.getElementById('messages').innerText = "connected";
@@ -76,20 +87,9 @@ class player {
     }
 
     getTouchPosition() {
-        var sk = this.socket;
-        var n = this.number;
         var surface = document.getElementById('surface');
         this.zt.bind(surface, 'tap', this.start);
-        this.zt.bind(surface, 'pan', function(ev) {
-            //console.log('pan: ' + ev.detail.events[0].clientY);
-            // var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
-            // if (vy < -3) vy = -3;
-            // if (vy > 3) vy = 3;
-            sk.emit('player', {
-                n: n,
-                y: getYPosition(ev)
-            });
-        });
+        this.zt.bind(surface, 'pan', this.getYPosition);
     }
 
 
@@ -170,6 +170,7 @@ class player {
             });
 
         }
+
 
     }
 

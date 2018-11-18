@@ -1,7 +1,7 @@
 {
-    "short_name": "Test HTML5 Game",
-    "name": "Pong HTML5 version",
-    "start_url": "/index.html",
+    "short_name": "Pong",
+    "name": "Pong Mobile Rmeote",
+    "start_url": "/player",
     "display": "fullscreen",
     "orientation": "landscape"
-  }
+}
