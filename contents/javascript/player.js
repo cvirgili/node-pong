@@ -17,6 +17,7 @@ class player {
             //var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
             // if (vy < -3) vy = -3;
             // if (vy > 3) vy = 3;
+
             if (ypos < -3) ypos = -3;
             if (ypos > 3) ypos = 3;
             console.log("event", ev);
