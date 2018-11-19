@@ -4,9 +4,11 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var ejs = require('ejs');
-var ip = require('ip');
+//var ip = require('ip');
+const ni = require('network-interfaces');
 var favicon = require('serve-favicon');
 var PORT = 3000;
+var address = ni.toIp('ICT', { interval: false, ipVersion: 4 });
 
 var clients = [];
 
@@ -16,15 +18,15 @@ app.set('view engine', 'ejs');
 app.use(favicon(__dirname + '/favicon.ico'));
 
 app.get('/pong', function(req, res) {
-    res.render('pong', { ip: ip.address(), port: PORT });
+    res.render('pong', { ip: address, port: PORT });
 });
 
 app.get('/player1', function(req, res) {
-    res.render('player', { ip: ip.address(), number: 1 });
+    res.render('player', { ip: address, number: 1 });
 });
 
 app.get('/player2', function(req, res) {
-    res.render('player', { ip: ip.address(), number: 2 });
+    res.render('player', { ip: address, number: 2 });
 });
 
 io.on('connect', function(socket) {
@@ -34,11 +36,9 @@ io.on('connect', function(socket) {
             if (clients[i].sk == socket) {
                 io.emit('showqr', clients[i].n);
                 clients.splice(i, 1);
-                //io.emit('stop');
             }
         }
         socket.disconnect();
-        // console.log('clients: ' + clients.length);
     });
     socket.on('close', function(data) {});
     socket.on('end', function(data) {});
@@ -49,27 +49,21 @@ io.on('connect', function(socket) {
             io.emit('player2', obj.y);
 
     });
-
-
     socket.on('player1', (y) => {
         io.emit('player1', y);
     });
     socket.on('player2', (y) => {
         io.emit('player2', y);
     });
-
     socket.on('resetclients', function() {
         io.sockets.emit('resetclients');
-
     });
     socket.on('goal', function(obj) {
         io.sockets.emit('goal', obj);
     });
-
     socket.on('start', function(obj) {
         io.emit('start', obj);
     });
-
     socket.on('user-photo', function(obj) {
         io.emit('user-photo', obj);
     });
@@ -86,11 +80,11 @@ io.on('connect', function(socket) {
             io.sockets.emit('goal', { n: 1, point1: 0, point2: 0 });
             io.sockets.emit('ready');
         }
-
-        // console.log('clients: ' + clients.length);
     });
 });
 
-http.listen(PORT, function() {
+http.listen(PORT, '192.168.0.100', function() {
     console.log('app listening on :' + PORT);
+
+    console.log("ip", ni.toIp('ICT', { interval: false, ipVersion: 4 }));
 });

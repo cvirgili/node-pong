@@ -2,34 +2,20 @@
 var interval, ypos = 0.0;
 class player {
     constructor(number, socket) {
-        //$('#messages').text("PLAYER CREATED");
-        //console.log('player' + number);
-        //console.log('socket' + socket);
         this.number = number;
         this.socket = socket;
         this.socket.forceNew = true;
         this.zt = new ZingTouch.Region(document.body);
         this.getYPosition = function(ev) {
-            //ypos += 3 * (ev.detail.data[0].distanceFromOrigin / window.innerHeight) * ((ev.detail.data[0].directionFromOrigin >= 0 && ev.detail.data[0].directionFromOrigin <= 180) ? 1 : -1);
-            //ypos += 0.1 * ((ev.detail.data[0].directionFromOrigin >= 0 && ev.detail.data[0].directionFromOrigin <= 180) ? 1 : -1);
-            // ypos = ev.detail.events[0].clientY / window.innerHeight * 1.5 * -6 + 3;
-            ypos = ev.detail.events[0].pageY / document.getElementById('surface').clientHeight * -10 + 5;
-            //var vy = ev.detail.events[0].clientY / window.innerHeight * 6 - 3;
-            // if (vy < -3) vy = -3;
-            // if (vy > 3) vy = 3;
-
+            ypos = ev.detail.events[0].pageY / document.getElementById('surface').clientHeight * -20 + 10;
             if (ypos < -3) ypos = -3;
             if (ypos > 3) ypos = 3;
             console.log("event", ev);
-            //document.getElementById('messages').innerText = ypos;
-
             return ypos;
         };
         this.initSocket();
         this.getTouchPosition();
         this.start;
-        //this.getAccelerometer();
-
         this.startSendY = function() {
             interval = setInterval(function() {
                 socket.emit('player' + number, ypos);
@@ -80,7 +66,6 @@ class player {
             if (n == p.n) {
                 document.getElementById('messages').innerText = "TAP TO START";
                 isStart = true;
-                //zt.bind(surface, 'tap', start);
             } else {
                 document.getElementById('messages').innerText = "";
             }
@@ -92,8 +77,6 @@ class player {
         this.zt.bind(surface, 'tap', this.start);
         this.zt.bind(surface, 'pan', this.getYPosition);
     }
-
-
 
     getAccelerometer() {
         var sk = this.socket;
