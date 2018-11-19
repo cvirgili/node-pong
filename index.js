@@ -8,9 +8,10 @@ var ejs = require('ejs');
 const ni = require('network-interfaces');
 var favicon = require('serve-favicon');
 var PORT = 3000;
-var ipoptions = { interval: false, ipVersion: 4 };
 const settings = require(__dirname + '/settings.json');
-var address = ni.toIp(settings.ethernetname, ipoptions);
+var ipoptions = { interval: false, ipVersion: 4 };
+var address;
+try { address = ni.toIp(settings.ethernetname, ipoptions); } catch (e) { address = ni.toIp(ni.getInterfaces(ipoptions)[0], ipoptions); };
 var clients = [];
 
 app.use('/contents', express.static(__dirname + '/contents'));
@@ -87,5 +88,5 @@ io.on('connect', function(socket) {
 
 http.listen(PORT, address, function() {
     console.log('app listening on :' + PORT);
-    console.log("interfaces", ni.getInterfaces(ipoptions));
+    console.log("address", address);
 });
