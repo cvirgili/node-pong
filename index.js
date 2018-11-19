@@ -8,8 +8,9 @@ var ejs = require('ejs');
 const ni = require('network-interfaces');
 var favicon = require('serve-favicon');
 var PORT = 3000;
-var address = ni.toIp('ICT', { interval: false, ipVersion: 4 });
-
+var ipoptions = { interval: false, ipVersion: 4 };
+const settings = require(__dirname + '/settings.json');
+var address = ni.toIp(settings.ethernetname, ipoptions);
 var clients = [];
 
 app.use('/contents', express.static(__dirname + '/contents'));
@@ -38,6 +39,7 @@ io.on('connect', function(socket) {
                 clients.splice(i, 1);
             }
         }
+        io.emit('disconnect');
         socket.disconnect();
     });
     socket.on('close', function(data) {});
@@ -83,8 +85,7 @@ io.on('connect', function(socket) {
     });
 });
 
-http.listen(PORT, '192.168.0.100', function() {
+http.listen(PORT, address, function() {
     console.log('app listening on :' + PORT);
-
-    console.log("ip", ni.toIp('ICT', { interval: false, ipVersion: 4 }));
+    console.log("interfaces", ni.getInterfaces(ipoptions));
 });

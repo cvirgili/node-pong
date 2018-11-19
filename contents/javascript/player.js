@@ -10,7 +10,7 @@ class player {
             ypos = ev.detail.events[0].pageY / document.getElementById('surface').clientHeight * -20 + 10;
             if (ypos < -3) ypos = -3;
             if (ypos > 3) ypos = 3;
-            console.log("event", ev);
+            //console.log("event", ev);
             return ypos;
         };
         this.initSocket();
@@ -19,7 +19,7 @@ class player {
         this.startSendY = function() {
             interval = setInterval(function() {
                 socket.emit('player' + number, ypos);
-            }, 50);
+            }, 60);
         }
         this.stopSendY = function() {
             clearInterval(interval);
@@ -70,6 +70,7 @@ class player {
                 document.getElementById('messages').innerText = "";
             }
         });
+
     }
 
     getTouchPosition() {
