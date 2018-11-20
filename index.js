@@ -87,6 +87,6 @@ io.on('connect', function(socket) {
 });
 
 http.listen(PORT, address, function() {
-    console.log('app listening on :' + PORT);
-    console.log("address", address);
+    console.log('app listening on', address, ':', PORT);
+    //console.log("address", address);
 });
