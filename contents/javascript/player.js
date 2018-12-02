@@ -1,5 +1,6 @@
 /*jshint esversion: 6*/
 var interval, ypos = 0.0;
+const framerate = 12.5;
 class player {
     constructor(number, socket) {
         this.number = number;
@@ -19,7 +20,7 @@ class player {
         this.startSendY = function() {
             interval = setInterval(function() {
                 socket.emit('player' + number, ypos);
-            }, 60);
+            }, 1000 / framerate);
         }
         this.stopSendY = function() {
             clearInterval(interval);
