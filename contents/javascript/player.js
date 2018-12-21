@@ -1,6 +1,6 @@
 /*jshint esversion: 6*/
 var interval, ypos = 0.0;
-const framerate = 12.5;
+const framerate = 25;
 class player {
     constructor(number, socket) {
         this.number = number;

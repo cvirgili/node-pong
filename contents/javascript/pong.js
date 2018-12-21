@@ -222,7 +222,8 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     var scene = createScene();
-    engine._fps = 12.5;
+    // engine._fps = 12.5;
+    engine._fps = 25;
     engine.runRenderLoop(function() {
         scene.render();
     });
