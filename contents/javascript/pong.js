@@ -144,7 +144,7 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         var updatePoints = function(n) {
-            vel = 2;
+            vel = 3;
             if ((n == 1 && point1 > 0) || (n == 2 && point2 > 0)) {
                 playApplause();
                 playAudioGoal();
@@ -157,7 +157,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var setVelocity = function(obj1, obj2, imp1, vx) {
             playAudioBall();
-            vel = vel > 6 ? 6 : vel + 0.08;
+            //vel = vel > 6 ? 6 : vel + 0.08;
+            vel += 0.5;
             var vy = (obj1.position.y - obj2.position.y) * 1.5;
             vx = vx * (1 + Math.abs(obj1.position.y - obj2.position.y));
             imp1.setLinearVelocity(new BABYLON.Vector3(vx, vy, 0));
@@ -223,7 +224,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     var scene = createScene();
     // engine._fps = 12.5;
-    engine._fps = 25;
+    engine._fps = 12.5;
     engine.runRenderLoop(function() {
         scene.render();
     });

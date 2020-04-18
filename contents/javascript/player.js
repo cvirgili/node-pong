@@ -1,6 +1,9 @@
 /*jshint esversion: 6*/
 var interval, ypos = 0.0;
-const framerate = 25;
+const framerate = 12;
+const surface = document.getElementById('surface');
+const messages = document.getElementById('messages');
+
 class player {
     constructor(number, socket) {
         this.number = number;
@@ -8,23 +11,26 @@ class player {
         this.socket.forceNew = true;
         this.zt = new ZingTouch.Region(document.body);
         this.getYPosition = function(ev) {
-            ypos = ev.detail.events[0].pageY / document.getElementById('surface').clientHeight * -20 + 10;
+            //console.log(ev.touches[0].clientY, ev);
+            //ypos = ev.detail.events[0].pageY / surface.clientHeight * -20 + 10;
+            ypos = -(ev.touches[0].clientY / surface.clientHeight) * 10 + 5; // * -20 + 10;
             if (ypos < -3) ypos = -3;
             if (ypos > 3) ypos = 3;
             //console.log("event", ev);
+            socket.emit('player' + number, ypos);
             return ypos;
         };
+        this.start;
         this.initSocket();
         this.getTouchPosition();
-        this.start;
-        this.startSendY = function() {
-            interval = setInterval(function() {
-                socket.emit('player' + number, ypos);
-            }, 1000 / framerate);
-        }
-        this.stopSendY = function() {
-            clearInterval(interval);
-        }
+        // this.startSendY = function() {
+        //     interval = setInterval(function() {
+        //         socket.emit('player' + number, ypos);
+        //     }, 1000 / (framerate * 2));
+        // }
+        // this.stopSendY = function() {
+        //     clearInterval(interval);
+        // }
     }
 
     initSocket() {
@@ -37,18 +43,18 @@ class player {
                 sk.emit('start', n);
                 isStart = false;
             }
-            document.getElementById('messages').innerText = "";
+            messages.innerText = "";
         };
-        document.getElementById('surface').style.opacity = 1;
+        surface.style.opacity = 1;
         sk.emit('playerconnected', n);
-        document.getElementById('messages').innerText = "connected";
+        messages.innerText = "connected";
         this.socket.on('connect', function() {});
         this.socket.on('error', function() {
-            document.getElementById('messages').innerText = "error";
+            messages.innerText = "error";
             sk.close();
         });
         this.socket.on('close', function() {
-            document.getElementById('messages').innerText = "close";
+            messages.innerText = "close";
             sk.close();
         });
         this.socket.on('end', function() {
@@ -58,26 +64,28 @@ class player {
             sk.close();
         });
         this.socket.on('disconnect', function() {
-            document.getElementById('messages').innerText = "CONNESSIONE CHIUSA";
-            document.getElementById('surface').style.opacity = 0;
+            messages.innerText = "CONNESSIONE CHIUSA";
+            surface.style.opacity = 0;
             sk.close();
         });
         this.socket.on('goal', function(p) {
             document.getElementById('points').innerText = p.point1 + " : " + p.point2;
             if (n == p.n) {
-                document.getElementById('messages').innerText = "TAP TO START";
+                messages.innerText = "TAP TO START";
                 isStart = true;
             } else {
-                document.getElementById('messages').innerText = "";
+                messages.innerText = "";
             }
         });
 
     }
 
     getTouchPosition() {
-        var surface = document.getElementById('surface');
-        this.zt.bind(surface, 'tap', this.start);
-        this.zt.bind(surface, 'pan', this.getYPosition);
+        //this.zt.bind(surface, 'tap', this.start);
+        //this.zt.bind(surface, 'pan', this.getYPosition);
+
+        surface.addEventListener("touchend", this.start);
+        surface.addEventListener("touchmove", this.getYPosition);
     }
 
     getAccelerometer() {
@@ -85,7 +93,7 @@ class player {
         var n = this.number;
 
         if ('Accelerometer' in window && 'Gyroscope' in window) {
-            document.getElementById('messages').innerHTML = 'Generic Sensor API';
+            messages.innerHTML = 'Generic Sensor API';
 
             let accelerometer = new Accelerometer();
             accelerometer.addEventListener('reading', e => accelerationHandler(accelerometer, 'moAccel'));
@@ -108,7 +116,7 @@ class player {
             intervalHandler('Not available in Generic Sensor API');
 
         } else if ('DeviceMotionEvent' in window) {
-            document.getElementById('messages').innerHTML = 'Device Motion API';
+            messages.innerHTML = 'Device Motion API';
 
             var onDeviceMotion = function(eventData) {
                 //accelerationHandler(eventData.acceleration, 'messages');
@@ -119,7 +127,7 @@ class player {
 
             window.addEventListener('devicemotion', onDeviceMotion, false);
         } else {
-            document.getElementById('messages').innerHTML = 'No Accelerometer & Gyroscope API available';
+            messages.innerHTML = 'No Accelerometer & Gyroscope API available';
         }
 
         function accelerationHandler(acceleration, targetId) {
