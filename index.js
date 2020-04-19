@@ -13,7 +13,7 @@ var ipoptions = { interval: false, ipVersion: 4 };
 var address;
 try { address = ni.toIp(settings.ethernetname, ipoptions); } catch (e) { address = ni.toIp(ni.getInterfaces(ipoptions)[0], ipoptions); };
 var clients = [];
-var playersObj = {};
+var playersObj = { y1: 0, y2: 0 };
 
 app.use('/contents', express.static(__dirname + '/contents'));
 app.use('/modules', express.static(__dirname + '/node_modules'));
@@ -46,22 +46,26 @@ io.on('connect', function(socket) {
     });
     socket.on('close', function(data) {});
     socket.on('end', function(data) {});
-    socket.on('player', function(obj) {
+    socket.on('player', function(n, y) {
         //######################################################
-        playersObj["player" + obj.n] = obj.y;
-        if (obj.n == 1)
-            io.emit('player1', obj.y);
-        if (obj.n == 2)
-            io.emit('player2', obj.y);
+        playersObj["y" + n] = y;
+        //console.log(playersObj)
+        // io.emit("players-control", playersObj);
+        // if (obj.n == 1)
+        //     io.emit('player1', obj.y);
+        // if (obj.n == 2)
+        //     io.emit('player2', obj.y);
         //######################################################
 
     });
-    socket.on('player1', (y) => {
-        io.emit('player1', y);
-    });
-    socket.on('player2', (y) => {
-        io.emit('player2', y);
-    });
+
+    // socket.on('player1', (y) => {
+    //     io.emit('player1', y);
+    // });
+    // socket.on('player2', (y) => {
+    //     io.emit('player2', y);
+    // });
+
     socket.on('resetclients', function() {
         io.sockets.emit('resetclients');
     });
@@ -92,5 +96,10 @@ io.on('connect', function(socket) {
 
 http.listen(PORT, address, function() {
     console.log('app listening on', address, ':', PORT);
+
+    setInterval(() => {
+        io.emit("players-control", playersObj);
+    }, 70);
+
     //console.log("address", address);
 });

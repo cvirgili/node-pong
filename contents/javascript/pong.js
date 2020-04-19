@@ -1,17 +1,20 @@
-var BGaudio = new Audio('/contents/audio/Background.mp3');
-var ballaudio = new Audio('/contents/audio/Laser.mp3');
-var goalaudio = new Audio('/contents/audio/Goal.mp3');
-var applauseaudio = new Audio('/contents/audio/Applause.mp3');
+// var BGaudio = new Audio('/contents/audio/Background.mp3');
+// var ballaudio = new Audio('/contents/audio/Laser.mp3');
+// var goalaudio = new Audio('/contents/audio/Goal.mp3');
+// var applauseaudio = new Audio('/contents/audio/Applause.mp3');
+
+const easeInOutQuad = t => t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+const canvas = document.getElementById('renderCanvas');
+const engine = new BABYLON.Engine(canvas, true);
+
 
 window.addEventListener('DOMContentLoaded', function() {
 
-    BGaudio.pause();
-    ballaudio.pause();
-    goalaudio.pause();
-    applauseaudio.pause();
+    // BGaudio.pause();
+    // ballaudio.pause();
+    // goalaudio.pause();
+    // applauseaudio.pause();
 
-    var canvas = document.getElementById('renderCanvas');
-    var engine = new BABYLON.Engine(canvas, true);
     var vel = 2;
 
     var createScene = function() {
@@ -21,8 +24,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var scene = new BABYLON.Scene(engine);
         var wallmaterial = new BABYLON.StandardMaterial('wallmaterial', scene);
-        wallmaterial.specularColor = new BABYLON.Color3(1, 1, 1);
-        wallmaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
+        // wallmaterial.specularColor = new BABYLON.Color3(1, 1, 1);
+        // wallmaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
         wallmaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
 
         var gravityVector = new BABYLON.Vector3(0, 0, 0);
@@ -30,27 +33,49 @@ window.addEventListener('DOMContentLoaded', function() {
         scene.enablePhysics(gravityVector, physicsPlugin);
         scene.ambientColor = new BABYLON.Color3(1, 1, 1);
 
-        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, -12), scene);
-        camera.setTarget(BABYLON.Vector3.Zero());
 
         var light = new BABYLON.PointLight('light1', new BABYLON.Vector3(0, 0, -1000), scene);
+        light.intensity = 0.9;
+        light.diffuse = new BABYLON.Color3(1, 1, 0.9);
+        // var light2 = new BABYLON.PointLight('light2', new BABYLON.Vector3(-100, -100, -100), scene);
+        // light2.diffuse = new BABYLON.Color3(0.8, 0.8, 0.8);
 
         var halfrow = BABYLON.Mesh.CreatePlane('middlerow', 0.1, scene);
         halfrow.scaling.y = 80;
         halfrow.material = wallmaterial;
 
-        var ball = BABYLON.Mesh.CreateSphere('sphere1', 8, 0.4, scene);
+        var ball = BABYLON.Mesh.CreateSphere('sphere1', 4, 0.4, scene);
         ball.material = new BABYLON.StandardMaterial('spherematerial', scene);
-        ball.material.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0);
-        ball.material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0);
-        ball.material.specularColor = new BABYLON.Color3(1, 1, 0);
+        ball.material.diffuseColor = new BABYLON.Color3(0.7, 0.6, 0.4);
+        ball.material.emissiveColor = new BABYLON.Color3(.2, 0.2, 0.2);
+        ball.material.specularColor = new BABYLON.Color3(0, 0, 1);
         ball.position.y = 0;
+        //ball.position.z = -0.5;
+        //ball.scaling.z = 0.001;
+
+        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, -12), scene);
+        //camera.setTarget(BABYLON.Vector3.Zero());
+        camera.setTarget(ball.position);
+        camera.attachControl(canvas, true);
+        camera.noRotationConstraint = true;
+
+        //camera.noRotationConstraint = true;
+        //camera.upVector = new BABYLON.Vector3(0, 0, 0);
+        // var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 0, -100), scene);
+        // camera.mode = BABYLON.Camera.orthographic_camera;
+        // camera.orthoTop = 5;
+        // camera.orthoBottom = -5;
+        // camera.orthoLeft = -9;
+        // camera.orthoRight = 9;
+
+
 
         var floor = BABYLON.Mesh.CreateBox('floor', 200, scene);
         floor.position.z = 0.5;
         floor.scaling.z = 0.00001;
         floor.material = new BABYLON.StandardMaterial('floor', scene);
-        floor.material.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+        //floor.material.emissiveColor = new BABYLON.Color3(0.6, 0.6, 0.6);
+        floor.material.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0.6);
         floor.material.specularColor = new BABYLON.Color3(0, 0, 0);
 
         var box1 = BABYLON.Mesh.CreateBox('box1', 0.2, scene);
@@ -60,7 +85,7 @@ window.addEventListener('DOMContentLoaded', function() {
         box1.position.z = 0;
         box1.material = new BABYLON.StandardMaterial('box1mat', scene);
         box1.material.diffuseColor = new BABYLON.Color3(1.0, 0.766, 0.336);
-        box1.material.emissiveColor = new BABYLON.Color3(1.0, 0.766, 0.336);
+        // box1.material.emissiveColor = new BABYLON.Color3(1.0, 0.766, 0.336);
         box1.material.specularColor = new BABYLON.Color3(1.0, 0.766, 0.336);
 
         var box2 = BABYLON.Mesh.CreateBox('box2', 0.2, scene);
@@ -70,7 +95,7 @@ window.addEventListener('DOMContentLoaded', function() {
         box2.position.z = 0;
         box2.material = new BABYLON.StandardMaterial('box1mat', scene);
         box2.material.diffuseColor = new BABYLON.Color3(0.0, 0.766, 1.0);
-        box2.material.emissiveColor = new BABYLON.Color3(0.0, 0.766, 1.0);
+        // box2.material.emissiveColor = new BABYLON.Color3(0.0, 0.766, 1.0);
         box2.material.specularColor = new BABYLON.Color3(0.0, 0.766, 1.0);
 
         var goal1 = BABYLON.Mesh.CreateBox('goal1', 0.1, scene);
@@ -88,8 +113,8 @@ window.addEventListener('DOMContentLoaded', function() {
         var widthMesh = 4,
             heightMesh = 2;
         //////////////////////////////////////////////////
-        var textTitle = new BABYLON.DynamicTexture("textTitle", { width: widthCanvas, height: heightCanvas }, scene, true);
-        textTitle.drawText("00 00", null, null, "Bold 380px Consolas", "rgba(255,255,255,1.0)", "rgba(0,0,0,0)"); // "transparent"
+        var textTitle = new BABYLON.DynamicTexture("textTitle", { width: 1000, height: 1000 }, scene, true);
+        textTitle.drawText("000 000", null, null, "Bold 280px Consolas", "rgba(255,255,255,1.0)", "rgba(0,0,0,0)"); // "transparent"
         textTitle.update();
         var titleMat = new BABYLON.StandardMaterial("titleMat", scene);
         titleMat.diffuseTexture = textTitle;
@@ -145,20 +170,20 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var updatePoints = function(n) {
             vel = 3;
-            if ((n == 1 && point1 > 0) || (n == 2 && point2 > 0)) {
-                playApplause();
-                playAudioGoal();
-            }
+            // if ((n == 1 && point1 > 0) || (n == 2 && point2 > 0)) {
+            //     playApplause();
+            //     playAudioGoal();
+            // }
             textTitle.getContext().clearRect(0, 0, window.innerWidth, window.innerHeight);
-            textTitle.drawText(format(point1) + " " + format(point2), null, null, "Bold 380px Consolas", "rgba(255,255,255,1.0)", "rgba(0,0,0,0)"); // "transparent"
+            textTitle.drawText(format(point1) + " " + format(point2), null, null, "Bold 200px Consolas", "rgba(255,255,255,1.0)", "rgba(0,0,0,0)"); // "transparent"
             if (n == -1) return;
             socket.emit('goal', { n: n, point1: point1, point2: point2 });
         };
 
         var setVelocity = function(obj1, obj2, imp1, vx) {
-            playAudioBall();
+            //playAudioBall();
             //vel = vel > 6 ? 6 : vel + 0.08;
-            vel += 0.5;
+            vel += 0.4;
             var vy = (obj1.position.y - obj2.position.y) * 1.5;
             vx = vx * (1 + Math.abs(obj1.position.y - obj2.position.y));
             imp1.setLinearVelocity(new BABYLON.Vector3(vx, vy, 0));
@@ -175,22 +200,13 @@ window.addEventListener('DOMContentLoaded', function() {
             point2 = 0;
             ball.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
             updatePoints(-1);
-            BGaudio.pause();
+            //BGaudio.pause();
         };
 
-        socket.on('player1', function(y) {
-            setBoxVelocity(box1, y);
+        socket.on('players-control', (players) => {
+            box1.position.y = players.y1;
+            box2.position.y = players.y2;
         });
-        socket.on('player2', function(y) {
-            setBoxVelocity(box2, y);
-        });
-
-        function setBoxVelocity(box, y) {
-            box.position.y = y;
-            // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0, y, 0));
-            // if (box.position.y > 3) box.position.y = 3;
-            // if (box.position.y < -3) box.position.y = -3;
-        }
 
         socket.on('start', function(n) {
             ball.position.x = n == 1 ? box1.position.x + 0.1 : box2.position.x - 0.1;
@@ -207,24 +223,24 @@ window.addEventListener('DOMContentLoaded', function() {
         return scene;
     };
 
-    function playAudioBall() {
-        ballaudio.currentTime = 0;
-        ballaudio.play();
-    }
+    // function playAudioBall() {
+    //     ballaudio.currentTime = 0;
+    //     //ballaudio.play();
+    // }
 
-    function playAudioGoal() {
-        goalaudio.currentTime = 0;
-        goalaudio.play();
-    }
+    // function playAudioGoal() {
+    //     goalaudio.currentTime = 0;
+    //     //goalaudio.play();
+    // }
 
-    function playApplause() {
-        applauseaudio.currentTime = 0;
-        applauseaudio.play();
-    }
+    // function playApplause() {
+    //     applauseaudio.currentTime = 0;
+    //     //applauseaudio.play();
+    // }
 
     var scene = createScene();
     // engine._fps = 12.5;
-    engine._fps = 12.5;
+    // engine._fps = 50;
     engine.runRenderLoop(function() {
         scene.render();
     });
@@ -234,7 +250,7 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     function format(val) {
-        return ("0" + val).slice(-2);
+        return ("000000" + val).slice(-3);
     }
 
     socket.on('hideqr', function(n) {
@@ -251,18 +267,18 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    socket.on('ready', function() {
-        BGaudio.currentTime = 0;
-        BGaudio.play();
-    });
+    // socket.on('ready', function() {
+    //     BGaudio.currentTime = 0;
+    //     //BGaudio.play();
+    // });
 
     socket.on('connect', function() {
         socket.emit('resetclients');
     });
 
-    BGaudio.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-    }, false);
+    // BGaudio.addEventListener('ended', function() {
+    //     this.currentTime = 0;
+    //     this.play();
+    // }, false);
 
 });

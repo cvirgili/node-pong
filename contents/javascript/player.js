@@ -1,5 +1,5 @@
 /*jshint esversion: 6*/
-var interval, ypos = 0.0;
+var interval, ypos = 0;
 const framerate = 12;
 const surface = document.getElementById('surface');
 const messages = document.getElementById('messages');
@@ -9,28 +9,17 @@ class player {
         this.number = number;
         this.socket = socket;
         this.socket.forceNew = true;
-        this.zt = new ZingTouch.Region(document.body);
         this.getYPosition = function(ev) {
-            //console.log(ev.touches[0].clientY, ev);
-            //ypos = ev.detail.events[0].pageY / surface.clientHeight * -20 + 10;
-            ypos = -(ev.touches[0].clientY / surface.clientHeight) * 10 + 5; // * -20 + 10;
+            ypos = ev.touches[0].clientY / surface.clientHeight * -20 + 10;
             if (ypos < -3) ypos = -3;
             if (ypos > 3) ypos = 3;
-            //console.log("event", ev);
-            socket.emit('player' + number, ypos);
-            return ypos;
         };
         this.start;
         this.initSocket();
         this.getTouchPosition();
-        // this.startSendY = function() {
-        //     interval = setInterval(function() {
-        //         socket.emit('player' + number, ypos);
-        //     }, 1000 / (framerate * 2));
-        // }
-        // this.stopSendY = function() {
-        //     clearInterval(interval);
-        // }
+        interval = setInterval(() => {
+            socket.emit('player', number, ypos.toFixed(1));
+        }, 25);
     }
 
     initSocket() {
@@ -81,9 +70,6 @@ class player {
     }
 
     getTouchPosition() {
-        //this.zt.bind(surface, 'tap', this.start);
-        //this.zt.bind(surface, 'pan', this.getYPosition);
-
         surface.addEventListener("touchend", this.start);
         surface.addEventListener("touchmove", this.getYPosition);
     }
