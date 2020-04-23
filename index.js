@@ -99,7 +99,7 @@ http.listen(PORT, address, function() {
 
     setInterval(() => {
         io.emit("players-control", playersObj);
-    }, 70);
+    }, 40);
 
     //console.log("address", address);
 });

@@ -178,6 +178,7 @@ window.addEventListener('DOMContentLoaded', function() {
             textTitle.drawText(format(point1) + " " + format(point2), null, null, "Bold 200px Consolas", "rgba(255,255,255,1.0)", "rgba(0,0,0,0)"); // "transparent"
             if (n == -1) return;
             socket.emit('goal', { n: n, point1: point1, point2: point2 });
+            reset();
         };
 
         var setVelocity = function(obj1, obj2, imp1, vx) {
@@ -191,21 +192,28 @@ window.addEventListener('DOMContentLoaded', function() {
 
         //////////////////////////////////////////////////////////////////////////////////////
 
-        var reset = function() {
+        var reset = function(points) {
             ball.position.x = 0;
             ball.position.y = 0;
             box1.position.y = 0;
             box2.position.y = 0;
-            point1 = 0;
-            point2 = 0;
+            if (points) {
+                point1 = 0;
+                point2 = 0;
+            }
             ball.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
             updatePoints(-1);
             //BGaudio.pause();
         };
 
         socket.on('players-control', (players) => {
-            box1.position.y = players.y1;
-            box2.position.y = players.y2;
+            // box1.position.y = players.y1;
+            // box2.position.y = players.y2;
+            let autoy = ((ball.position.y) < 0 ? (ball.position.y) - 0.5 : (ball.position.y) + 0.5);
+            autoy = autoy > 3 ? 3 : autoy;
+            autoy = autoy < -3 ? -3 : autoy;
+            box2.position.y = autoy;
+            box1.position.y = autoy;
         });
 
         socket.on('start', function(n) {
@@ -217,9 +225,9 @@ window.addEventListener('DOMContentLoaded', function() {
         socket.on('showqr', function(n) {
             $('#player' + n).show();
             $('#photo' + n).hide();
-            reset();
+            reset(true);
         });
-        reset();
+        reset(true);
         return scene;
     };
 
